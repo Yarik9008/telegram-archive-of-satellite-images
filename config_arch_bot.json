@@ -1,0 +1,81 @@
+{   
+    "data_directory" : "C:/Lorett/data/decoded",
+
+    "chat_fast" : "@X_ArchiveFAST",
+
+    "chat_all" : "@PlanumMobile0Archive",
+
+    "TOKEN" : "5094120884:AAHZKdwfNtH5FVD9EdoIOgVhMIsqngfM4y4",
+
+    "api_hash" : "3d29770555fbca4b0ea880003ed892bc",
+
+    "api_id" : 25004944,
+
+    "name_station" : "test", 
+
+    "location" : "test",
+
+    "compression_ratio" : 5,
+
+    "dawn_utc" : {
+        "hour" : 5,
+        "minute" : 0,
+        "second" : 0
+    }, 
+
+    "sunset_utc" : {
+        "hour" : 14,
+        "minute" : 1,
+        "second" : 0
+    },
+
+    "delay" : 3,
+
+    "flip" : true,
+
+    "size" : 230,
+
+    "difference" : 1200,
+
+    "satList" : { 
+        "NOAA 18" : {
+            "day_product" : "/AVHRR/avhrr_3_rgb_4_221_Merge_corrected.png",
+            "night_product" : "/AVHRR/avhrr_3_rgb_3b45_corrected.png"
+        },
+
+        "NOAA 19" : {
+            "day_product" : "/AVHRR/avhrr_3_rgb_4_221_Merge_corrected.png",
+            "night_product" : "/AVHRR/avhrr_3_rgb_3b45_corrected.png"
+        },
+
+        "METOP-B" : {
+            "day_product" : "/AVHRR/avhrr_3_rgb_4_221_Merge_corrected.png",
+            "night_product" : "/AVHRR/avhrr_3_rgb_3b45_corrected.png"
+        },
+
+        "METOP-C" : {
+            "day_product" : "/AVHRR/avhrr_3_rgb_4_221_Merge_corrected.png",
+            "night_product" : "/AVHRR/avhrr_3_rgb_3b45_corrected.png"
+        },
+
+        "METEOR-M2" : {
+            "day_product" : "/MSU-MR/msu_mr_rgb_221_corrected.png",
+            "night_product" : "/MSU-MR/msu_mr_rgb_456_corrected.png"
+        },
+
+        "METEOR-M2 2" : {
+            "day_product" : "/MSU-MR/msu_mr_rgb_221_corrected.png",
+            "night_product" : "/MSU-MR/msu_mr_rgb_456_corrected.png"
+        },
+
+        "METEOR-M2 3" : {
+            "day_product" : "/MSU-MR/msu_mr_rgb_221_corrected.png",
+            "night_product" : "/MSU-MR/msu_mr_rgb_456_corrected.png"
+        },
+
+        "FENGYUN 3C" : {
+            "day_product" : "/VIRR/virr_rgb_4_221_Merge_corrected.png",
+            "night_product" : "/VIRR/virr_4_individual_equalized_corrected.png"
+        }
+    }
+}

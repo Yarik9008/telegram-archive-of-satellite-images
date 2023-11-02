@@ -68,11 +68,11 @@ class Logger:
         self.mylogs.addHandler(self.file)
         self.mylogs.addHandler(self.stream)
 
-        coloredlogs.install(level=level, logger=self.mylogs, fmt='%(asctime)s [%(levelname)s] - %(message)s')
+        coloredlogs.install(level=level, logger=self.mylogs, fmt='%(asctime)s [%(levelname)s] %(message)s')
 
         logging.Formatter.converter = gmtime                            
 
-        self.lastLog = {"message": "-", "source": "station"}
+        self.lastLog = {"message": " ", "source": "station"}
 
         self.mylogs.info('Start Logger')
 
