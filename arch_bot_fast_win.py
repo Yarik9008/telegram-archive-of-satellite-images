@@ -111,8 +111,8 @@ def main():
                                 
                             resized_image(name_image_in, name_image_out, config['compression_ratio'])
                                 
-                            if (isFlip(str(path.name).rsplit("_")[2], timeMoment)) and config['flip']:
-                                flip_imege(name_image_out, name_image_out, 180)
+                            # if (isFlip(str(path.name).rsplit("_")[2], timeMoment)) and config['flip']:
+                            #     flip_imege(name_image_out, name_image_out, 180)
                             
                             sleep(config['delay'])
                                 
@@ -127,7 +127,7 @@ def main():
                                 
                                 logs.error(f'error send product: {str(name_image_out)}')
 
-                            with open(str(os.path.dirname(os.path.abspath(__file__))) + "/pass_list.txt", 'a+') as file_pass:
+                            with open("C:/Lorett/telegram-archive-of-satellite-images/pass_list.txt", 'a+') as file_pass:
                                     file_pass.write(str(path) + '\n')
                                     logs.info(f'pass append to file: {str(name_image_out)}')
 
@@ -166,16 +166,12 @@ if __name__ == "__main__":
     
     logs.info('Start telegram bot')
 
-
-
-    settings = {}
-    while "lat" not in settings:
-        try:
-            settings = get("http://localhost:80/getSettings").json()
-        except:
-            logs.info("Failed get settings from station. wait 10 seconds")
-            sleep(10)
+    # settings = {}
+    # while "lat" not in settings:
+    #     try:
+    #         settings = get("http://localhost:80/getSettings").json()
+    #     except:
+    #         logs.info("Failed get settings from station. wait 10 seconds")
+    #         sleep(10)
             
     main()
-    
-input()

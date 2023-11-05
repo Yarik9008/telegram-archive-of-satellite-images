@@ -1,7 +1,7 @@
 {   
     "data_directory" : "C:/Lorett/data/decoded",
 
-    "chat_fast" : "@X_ArchiveFAST",
+    "chat_fast" : "@L_ArchiveFAST",
 
     "chat_all" : "@PlanumMobile0Archive",
 
@@ -11,11 +11,11 @@
 
     "api_id" : 25004944,
 
-    "name_station" : "test", 
+    "name_station" : "L2S school 777", 
 
-    "location" : "test",
+    "location" : "Saint-Petersburg (59.997331, 30.199110)",
 
-    "compression_ratio" : 5,
+    "compression_ratio" : 3,
 
     "dawn_utc" : {
         "hour" : 5,
@@ -33,9 +33,9 @@
 
     "flip" : true,
 
-    "size" : 230,
+    "size" : 20,
 
-    "difference" : 1200,
+    "difference" : 600,
 
     "satList" : { 
         "NOAA 18" : {
