@@ -35,30 +35,6 @@ def resized_image(image_in: Path, image_out: Path, compression_ratio: int):
     resized_image.save(image_out)
 
 
-def isFlip(satName: str, timeMoment: datetime) -> bool:
-    url = 'http://localhost:80/getSatPosition'
-    headers = {'Content-Type': 'application/json'}
-
-    data = {
-        'satName': satName,
-        'timeMoment': timeMoment.strftime("%Y-%m-%d %H:%M:%S")
-    }
-
-    try:
-        response = post(url, headers=headers, data=json.dumps(data))
-        if response.status_code == 200:
-            coordinates = response.json()
-
-            lat = coordinates.get("lat", 999)
-
-            if lat < settings["lat"]:
-                return True
-
-        return False
-
-    except:
-        return False
-
 def main():
     while True:
         
@@ -71,7 +47,7 @@ def main():
         newPath = []
         
         for i in passPath:
-            if str(i) + '\n' not in passList:
+            if str(i) + '\n' not in passList and i.is_dir():
                 checkNew = True
                 newPath.append(i)
                 logs.info(f"new pass: {str(i)}")
@@ -88,14 +64,46 @@ def main():
                     logs.info(f"pass not in file: {str(path)}")
                 
                     timeMoment = datetime.strptime(str(path)[len(config['data_directory']) + 1 : len(config['data_directory']) + 16], '%Y%m%d_%H%M%S')
-                    difference = int((datetime.now() - timeMoment).total_seconds())
+                    difference = int((datetime.utcnow() - timeMoment).total_seconds())
                     timeDay = time(hour=timeMoment.hour, minute=timeMoment.minute, second=timeMoment.second)
                     
                     if difference >= config['difference']:
                         
                         logs.info(f"difference correct: {str(path)}")
                         
-                        if dirSize(path) > config['size']:
+                        name_image_in = Path(str(path)+ config['satList'][str(path.name).rsplit("_")[2]]['day_product'])
+                        
+                        checkIm = False 
+                        
+                        logs.info(difference)
+                        
+                        if os.path.exists(str(name_image_in)) and os.path.getsize(str(name_image_in)) / ( 1024 * 1024) >= 1.5 and difference >= 3600:
+                            checkIm = True
+                            logs.info('checkIm = True')
+                            
+                            
+                        elif difference >= 3600:
+                            
+                            with open("C:/Lorett/telegram-archive-of-satellite-images/pass_list.txt", 'a+') as file_pass:
+                                file_pass.write(str(path) + '\n')
+                                logs.info(f'no correct')
+                                
+                            continue
+                        
+                        else:
+                                                            
+                            for i in range(300):
+                                if os.path.exists(str(name_image_in)) and os.path.getsize(str(name_image_in)) / ( 1024 * 1024) >= 1.5:
+                                    print(os.path.getsize(str(name_image_in)) / ( 1024 * 1024))
+                                    checkIm = True
+                                    logs.info('checkIm = True')
+                                    sleep(5)
+                                    break
+                                else:
+                                    logs.info('sleep 1')
+                                    sleep(5)
+                        
+                        if checkIm:
 
                             if timeDay >= dawn and timeDay <= sunset:
                                 
@@ -110,13 +118,11 @@ def main():
                                 product = str(config['satList'][str(path.name).rsplit("_")[2]]['day_product']).rsplit("/")[2]
                                 
                             resized_image(name_image_in, name_image_out, config['compression_ratio'])
-                                
-                            # if (isFlip(str(path.name).rsplit("_")[2], timeMoment)) and config['flip']:
-                            #     flip_imege(name_image_out, name_image_out, 180)
                             
                             sleep(config['delay'])
                                 
                             try:
+                                difference = int((datetime.utcnow() - timeMoment).total_seconds())
                                 
                                 bot.send_photo(chat_id=config['chat_fast'], photo=open(str(name_image_out), 'rb'),
                                         caption=f'Location: {config["location"]}\nStation: {config["name_station"]}\nPass: {path.name}\nProduct: {product}\nDifference: {str(timedelta(seconds=difference))}')
@@ -124,17 +130,16 @@ def main():
                                 logs.info(f'send product: {str(name_image_out)}')
 
                             except:
-                                
                                 logs.error(f'error send product: {str(name_image_out)}')
 
-                            with open("C:/Lorett/telegram-archive-of-satellite-images/pass_list.txt", 'a+') as file_pass:
-                                    file_pass.write(str(path) + '\n')
-                                    logs.info(f'pass append to file: {str(name_image_out)}')
-
                         else:
-                            logs.info(f'delite pass: {str(path)}')
-                            rmtree(path)
+                            logs.info(f'low size pass: {str(path)}')
                             
+                        
+                        with open("C:/Lorett/telegram-archive-of-satellite-images/pass_list.txt", 'a+') as file_pass:
+                                file_pass.write(str(path) + '\n')
+                                logs.info(f'pass append to file')
+                                                
                     else:
                         logs.info(f"less difference: {str(path)}")
                         
@@ -143,8 +148,8 @@ def main():
         else:
             logs.debug(f'no new pass')
             
-        sleep(1)
-        logs.debug(f'active: {str(datetime.now())}')
+        sleep(10)
+        # logs.debug(f'active: {str(datetime.now())}')
                     
                     
                     
@@ -159,19 +164,10 @@ if __name__ == "__main__":
     Image.MAX_IMAGE_PIXELS = None
 
     logs = Logger('fast bot', str(os.path.dirname(os.path.abspath(__file__))) + '/.logs', loggingLevels['debug'])
-    logs.info(str(config))
 
     bot = telebot.TeleBot(config['TOKEN'])
     bot.remove_webhook()
     
     logs.info('Start telegram bot')
-
-    # settings = {}
-    # while "lat" not in settings:
-    #     try:
-    #         settings = get("http://localhost:80/getSettings").json()
-    #     except:
-    #         logs.info("Failed get settings from station. wait 10 seconds")
-    #         sleep(10)
             
     main()

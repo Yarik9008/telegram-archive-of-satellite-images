@@ -10,29 +10,6 @@ from pprint import pprint
 import os
 
 
-with open(str(os.path.dirname(os.path.abspath(__file__))) + "/config_arch_bot.json", 'r') as file_config:
-    config = json.load(file_config)
-       
-dawn = time(hour=config['dawn_utc']['hour'], minute=config['dawn_utc']['minute'], second=config['dawn_utc']['second'])  # рассвет
-sunset = time(hour=config['sunset_utc']['hour'], minute=config['sunset_utc']['minute'], second=config['sunset_utc']['second'])  # закат
-
-Image.MAX_IMAGE_PIXELS = None
-
-logs = Logger('fast bot', str(os.path.dirname(os.path.abspath(__file__))) + '/.logs', loggingLevels['debug'])
-
-bot = telebot.TeleBot(config['TOKEN'])
-logs.info('Start telegram bot')
-
-
-settings = {}
-while "lat" not in settings:
-    try:
-        settings = get("http://localhost:80/getSettings").json()
-    except:
-        logs.info("Failed get settings from station. wait 10 seconds")
-        sleep(10)
-
-
 def rmtree(f: Path):
     if f.is_file():
         f.unlink()
@@ -94,7 +71,7 @@ def main():
         newPath = []
         
         for i in passPath:
-            if str(i) + '\n' not in passList:
+            if str(i) + '\n' not in passList and i.is_dir():
                 checkNew = True
                 newPath.append(i)
                 logs.info(f"new pass: {str(i)}")
@@ -118,7 +95,22 @@ def main():
                         
                         logs.info(f"difference correct: {str(path)}")
                         
-                        if dirSize(path) > config['size']:
+                        name_image_in = Path(str(path)+ config['satList'][str(path.name).rsplit("_")[2]]['day_product'])
+                        
+                        checkIm = False 
+                        
+                        for i in range(120):
+                            if os.path.exists(str(name_image_in)) and os.path.getsize(str(name_image_in)) / ( 1024 * 1024) >= 1.5:
+                                print(os.path.getsize(str(name_image_in)) / ( 1024 * 1024))
+                                checkIm = True
+                                logs.info('checkIm = True')
+                                sleep(5)
+                                break
+                            else:
+                                logs.info('sleep 1')
+                                sleep(5)
+                        
+                        if checkIm:
 
                             if timeDay >= dawn and timeDay <= sunset:
                                 
@@ -140,6 +132,7 @@ def main():
                             sleep(config['delay'])
                                 
                             try:
+                                difference = int((datetime.now() - timeMoment).total_seconds())
                                 
                                 bot.send_photo(chat_id=config['chat_fast'], photo=open(str(name_image_out), 'rb'),
                                         caption=f'Location: {config["location"]}\nStation: {config["name_station"]}\nPass: {path.name}\nProduct: {product}\nDifference: {str(timedelta(seconds=difference))}')
@@ -155,8 +148,9 @@ def main():
                                     logs.info(f'pass append to file: {str(name_image_out)}')
 
                         else:
-                            logs.info(f'delite pass: {str(path)}')
-                            rmtree(path)
+                            logs.info(f'low size pass: {str(path)}')
+                            pass
+                            # rmtree(path)
                             
                     else:
                         logs.info(f"less difference: {str(path)}")
@@ -166,8 +160,8 @@ def main():
         else:
             logs.debug(f'no new pass')
             
-        sleep(1)
-        logs.debug(f'active: {str(datetime.now())}')
+        sleep(10)
+        # logs.debug(f'active: {str(datetime.now())}')
                     
                     
                     
