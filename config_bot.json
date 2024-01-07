@@ -1,0 +1,58 @@
+{   
+    "data_directory" : "/media/lorett/data/decoded",
+
+    "chat_fast" : "@X_ArchiveFAST",
+
+    "chat_all" : "@RastoropshaLite0Archive",
+
+    "TOKEN" : "6255977258:AAEA4iTM3Ogu76c7lfP2lFYebb-vzqknwS8",
+
+    "api_hash" : "3d29770555fbca4b0ea880003ed892bc",
+
+    "api_id" : 25004944,
+
+    "name_station" : "RastoropshaLite0", 
+
+    "location" : "Moscow (55.671683, 37.625282)",
+
+    "compression" : 5,
+
+    "delay" : 3,
+
+    "difference" : 1200,
+
+    "min_size" : 50,
+
+    "dawn_utc" : {
+        "hour" : 5,
+        "minute" : 0,
+        "second" : 0
+    }, 
+
+    "sunset_utc" : {
+        "hour" : 14,
+        "minute" : 1,
+        "second" : 0
+    },
+
+    "sat_list_x" : { 
+
+        "SUOMI NPP" : {
+            "day_product" : "/VIIRS/viirs_rgb_True_Color.png",
+            "night_product" : "/VIIRS/viirs_rgb_True_Color.png",
+            "data_file" : "/npp_hrd.cadu"
+        },
+
+        "NOAA 20" : {
+            "day_product" : "/VIIRS/viirs_rgb_True_Color.png",
+            "night_product" : "/VIIRS/viirs_rgb_True_Color.png",
+            "data_file" : "/npp_hrd.cadu"
+        },
+
+        "AQUA" : {
+            "day_product" : "/MODIS/modis_rgb_True_Color_corrected.png",
+            "night_product" : "/MODIS/modis_rgb_Day_Microphysics_corrected.png",
+            "data_file" : "/aqua_db.cadu"
+        }
+    }
+}
