@@ -1,0 +1,7 @@
+requests
+Pillow
+pyTelegramBotAPI
+telethon
+pyppeteer
+verboselogs
+coloredlogs
